@@ -16,6 +16,20 @@ Gem::Specification.new do |s|
     "LICENSE.txt",
     "README.md"
   ]
+  s.files = [
+    "Gemfile",
+    "Gemfile.lock",
+    "LICENSE.txt",
+    "README.md",
+    "Rakefile",
+    "VERSION",
+    "lib/mongoid_colored_logger.rb",
+    "lib/mongoid_colored_logger/logger_decorator.rb",
+    "lib/mongoid_colored_logger/railtie.rb",
+    "mongoid_colored_logger.gemspec",
+    "spec/mongoid_colored_logger_spec.rb",
+    "spec/spec_helper.rb"
+  ]
   s.homepage = "http://github.com/romanbsd/mongoid_colored_logger"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
