@@ -6,7 +6,9 @@ The gem brings the beauty of colored logging to Mongoid.
 
 Just add the following to Gemfile:
 
-    gem 'mongoid_colored_logger'
+```ruby
+gem 'mongoid_colored_logger'
+```
 
 ## Copyright
 
