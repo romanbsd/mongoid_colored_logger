@@ -27,9 +27,10 @@ module MongoidColoredLogger
     end
 
     def add(severity, message = nil, progname = nil, &block)
-      message = message.sub('MONGODB', color('MONGODB', odd? ? CYAN : MAGENTA)).
-        sub(%r{(?<=\[')([^']+)}) {|m| color(m, BLUE)}.
-        sub(%r{(?<=\]\.)\w+}) {|m| color(m, YELLOW)}
+      message = message.sub('MOPED:', color('MOPED:', odd? ? CYAN : MAGENTA)).
+        sub(/\{.+?\}\s/) { |m| color(m, BLUE) }.
+        sub(/COMMAND|QUERY|KILL_CURSORS/) { |m| color(m, YELLOW) }.
+        sub(/[\d\.]+ms/) { |m| color(m, GREEN) }
       @logger.add(severity, message, progname, &block)
     end
 
