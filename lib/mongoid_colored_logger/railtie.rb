@@ -4,7 +4,7 @@ module MongoidColoredLogger
 
   class Railtie < Rails::Railtie
     initializer 'logger_decorator', :after => :initialize_logger do
-      config.mongoid.logger = MongoidColoredLogger::LoggerDecorator.new(Rails.logger) if Rails.env.development?
+      config.mongoid.logger = MongoidColoredLogger::LoggerDecorator.new(Rails.logger)
     end
 
     # Make it output to STDERR in console
