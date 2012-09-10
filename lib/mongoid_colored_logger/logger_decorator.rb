@@ -27,7 +27,8 @@ module MongoidColoredLogger
     end
 
     def add(severity, message = nil, progname = nil, &block)
-      message = message.sub('MONGODB', color('MONGODB', odd? ? CYAN : MAGENTA)).
+      message = block.call if message.nil? and block_given?
+      message = message.to_s.sub('MONGODB', color('MONGODB', odd? ? CYAN : MAGENTA)).
         sub(%r{(?<=\[')([^']+)}) {|m| color(m, BLUE)}.
         sub(%r{(?<=\]\.)\w+}) {|m| color(m, YELLOW)}
       @logger.add(severity, message, progname, &block)
