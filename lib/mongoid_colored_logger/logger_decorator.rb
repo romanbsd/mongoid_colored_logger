@@ -16,10 +16,10 @@ module MongoidColoredLogger
       @logger = logger
     end
 
+    colorize_method = Mongoid::VERSION.to_f >= 3.0 ? :colorize_message : :colorize_legacy_message
+    
     %w[debug info warn error fatal unknown].each.with_index do |method, severity|
       define_method(method) do |message = nil, progname = nil, &block|
-        colorize_method = Mongoid::VERSION.to_f >= 3.0 ? :colorize_message : :colorize_legacy_message
-        
         message = block.call if message.nil? and block_given?
         message = self.send(colorize_method, message.to_s)
         
