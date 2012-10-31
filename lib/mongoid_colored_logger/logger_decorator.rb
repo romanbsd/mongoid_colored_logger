@@ -1,15 +1,5 @@
 module MongoidColoredLogger
   class LoggerDecorator
-    module Severity
-      DEBUG   = 0
-      INFO    = 1
-      WARN    = 2
-      ERROR   = 3
-      FATAL   = 4
-      UNKNOWN = 5
-    end
-    include Severity
-
     WHITE = "\e[37m"
     CYAN = "\e[36m"
     MAGENTA = "\e[35m"
@@ -26,20 +16,15 @@ module MongoidColoredLogger
       @logger = logger
     end
 
-    def add(severity, message = nil, progname = nil, &block)
-      message = block.call if message.nil? and block_given?
-      message = message.to_s.sub('MONGODB', color('MONGODB', odd? ? CYAN : MAGENTA)).
-        sub(%r{(?<=\[')([^']+)}) {|m| color(m, BLUE)}.
-        sub(%r{(?<=\]\.)\w+}) {|m| color(m, YELLOW)}
-      @logger.add(severity, message, progname, &block)
-    end
-
-    %w[debug info warn error fatal unknown].each do |method|
-      class_eval <<-EOT, __FILE__, __LINE__ + 1
-        def #{method}(message = nil, progname = nil, &block)  # def debug(message = nil, progname = nil, &block)
-          add(#{method.upcase}, message, progname, &block)    #   add(DEBUG, message, progname, &block)
-        end                                                   # end
-      EOT
+    %w[debug info warn error fatal unknown].each.with_index do |method, severity|
+      define_method(method) do |message = nil, progname = nil, &block|
+        colorize_method = Mongoid::VERSION.to_f >= 3.0 ? :colorize_message : :colorize_legacy_message
+        
+        message = block.call if message.nil? and block_given?
+        message = self.send(colorize_method, message.to_s)
+        
+        @logger.add(severity, message, progname, &block)
+      end
     end
 
     # Proxy everything else to the logger instance
@@ -47,7 +32,7 @@ module MongoidColoredLogger
       super || @logger.respond_to?(method)
     end
 
-    private
+  private
     def method_missing(method, *args, &block)
       @logger.send(method, *args, &block)
     end
@@ -58,10 +43,26 @@ module MongoidColoredLogger
       "#{bold}#{color}#{text}#{CLEAR}"
     end
 
+    # Used for Mongoid < 3.0
+    def colorize_legacy_message(message)
+      message.sub('MONGODB', color('MONGODB', odd? ? CYAN : MAGENTA)).
+        sub(%r{(?<=\[')([^']+)}) {|m| color(m, BLUE)}.
+        sub(%r{(?<=\]\.)\w+}) {|m| color(m, YELLOW)}
+    end
+
+    # Used for Mongoid >= 3.0
+    def colorize_message(message)
+      message = message.sub('MONGODB', color('MONGODB', odd? ? CYAN : MAGENTA)).
+        sub(%r{(?<=\[')([^']+)}) {|m| color(m, BLUE)}.
+        sub(%r{(?<=\]\.)\w+}) {|m| color(m, YELLOW)}
+      message.sub('MOPED:', color('MOPED:', odd? ? CYAN : MAGENTA)).
+        sub(/\{.+?\}\s/) { |m| color(m, BLUE) }.
+        sub(/COMMAND|QUERY|KILL_CURSORS/) { |m| color(m, YELLOW) }.
+        sub(/[\d\.]+ms/) { |m| color(m, GREEN) }
+    end
+
     def odd?
       @odd_or_even = ! @odd_or_even
     end
-
   end
-
 end

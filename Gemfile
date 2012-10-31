@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 
-gem 'mongoid', '~>2.4'
+gem 'mongoid'
 gem 'mongo', '~>1.6'
 
 group :development do
