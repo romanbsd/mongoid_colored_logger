@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "mongoid_colored_logger"
-  s.version = "0.1.5"
+  s.version = "0.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Roman Shterenzon"]
-  s.date = "2012-10-31"
+  s.date = "2012-11-01"
   s.description = "Beautiful logging for Mongoid"
   s.email = "romanbsd@yahoo.com"
   s.extra_rdoc_files = [
@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/romanbsd/mongoid_colored_logger"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.23"
+  s.rubygems_version = "1.8.24"
   s.summary = "Beautiful logging for Mongoid"
 
   if s.respond_to? :specification_version then
