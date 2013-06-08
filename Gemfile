@@ -1,7 +1,6 @@
 source "http://rubygems.org"
 
 gem 'mongoid'
-gem 'mongo', '~>1.6'
 
 group :development do
   gem "rdoc", "~> 3.12"
