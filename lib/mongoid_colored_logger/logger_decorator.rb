@@ -1,3 +1,5 @@
+require 'mongoid'
+
 module MongoidColoredLogger
   class LoggerDecorator
     WHITE = "\e[37m"
