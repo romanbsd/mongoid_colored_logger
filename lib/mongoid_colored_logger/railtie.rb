@@ -3,7 +3,8 @@ require 'mongoid_colored_logger/logger_decorator'
 module MongoidColoredLogger
 
   class Railtie < Rails::Railtie
-    base = Mongoid::VERSION.to_f >= 3.0 ? Moped : config.mongoid
+    mongoid_version = Mongoid::VERSION.to_f
+    base = mongoid_version >= 3.0 && mongoid_version <= 5.0 ? Moped : config.mongoid
 
     initializer 'logger_decorator', :after => :initialize_logger do
       base.logger = MongoidColoredLogger::LoggerDecorator.new(Rails.logger)
