@@ -59,8 +59,10 @@ module MongoidColoredLogger
         sub(%r{(?<=\]\.)\w+}) {|m| color(m, YELLOW)}
       message.sub('MOPED:', color('MOPED:', odd? ? CYAN : MAGENTA)).
         sub(/\{.+?\}\s/) { |m| color(m, BLUE) }.
-        sub(/COMMAND|QUERY|KILL_CURSORS|INSERT|DELETE|UPDATE|GET_MORE/) { |m| color(m, YELLOW) }.
-        sub(/[\d\.]+ms/) { |m| color(m, GREEN) }
+        sub(/COMMAND|QUERY|KILL_CURSORS|INSERT|DELETE|UPDATE|GET_MORE|STARTED/) { |m| color(m, YELLOW) }.
+        sub(/SUCCEEDED/) { |m| color(m, GREEN) }.
+        sub(/FAILED/) { |m| color(m, RED) }.
+        sub(/[\d\.]+(s|ms)/) { |m| color(m, GREEN) }
     end
 
     def odd?
