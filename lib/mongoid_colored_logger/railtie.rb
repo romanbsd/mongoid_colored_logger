@@ -12,7 +12,8 @@ module MongoidColoredLogger
 
     # Make it output to STDERR in console
     console do |app|
-      base.logger = MongoidColoredLogger::LoggerDecorator.new(Logger.new(STDERR))
+      console = ActiveSupport::Logger.new(STDERR)
+      Rails.logger.extend ActiveSupport::Logger.broadcast(console)
     end
   end
 end
